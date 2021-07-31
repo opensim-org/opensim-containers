@@ -1,0 +1,21 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && apt-get --yes --fix-missing install \
+    git \
+    build-essential libtool autoconf \
+    cmake cmake-curses-gui \
+    wget \
+    pkg-config \
+    gfortran \
+    freeglut3-dev \
+    libxi-dev libxmu-dev liblapack-dev libopenblas-dev \
+    cmake cmake-curses-gui \
+    coinor-libipopt-dev libcolpack-dev
+
+RUN git clone https://github.com/opensim-org/opensim-core.git && rm -rf opensim-core/.git
+
+RUN mkdir opensim_dependencies_build && cd opensim_dependencies_build && cmake ../opensim-core/dependencies/ \
+      -LAH -DCMAKE_INSTALL_PREFIX='~/opensim_dependencies_install' -DCMAKE_BUILD_TYPE=Release \
+      -DSUPERBUILD_ezc3d=ON -DSUPERBUILD_casadi=ON -DSUPERBUILD_adolc=ON -DSUPERBUILD_ipopt=ON \
+      -DSUPERBUILD_colpack=ON && make -j8 && rm -rf ../opensim_dependencies_build
+
