@@ -10,8 +10,8 @@ The containers are layered as follows
 - opensim-deps (dependencies and build tools)
 - opensim-pyhton (add in swig, python, build opensim-core python bindings)
 - opensim-java (add in swig, java, build opensim-core java bindings)
-- opensim-core-cpp (core with no bindings)
-- opensim-core-all (core with both python and java bindings)
+- opensim-cpp (opensim-core with no bindings)
+- opensim-all (opensim-core with both python and java bindings)
 - opensim-gui (add opensim-gui to opensim-java)
 
 Possible directions to go:
