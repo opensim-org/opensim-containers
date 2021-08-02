@@ -11,7 +11,7 @@ RUN apt-get update && apt-get --yes --fix-missing install \
     libxi-dev libxmu-dev liblapack-dev libopenblas-dev \
     cmake cmake-curses-gui \
     coinor-libipopt-dev libcolpack-dev
-
+# This clones latest master, we should use tags for public releases
 RUN git clone https://github.com/opensim-org/opensim-core.git && rm -rf opensim-core/.git
 
 RUN mkdir opensim_dependencies_build && cd opensim_dependencies_build && cmake ../opensim-core/dependencies/ \
