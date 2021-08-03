@@ -1,0 +1,7 @@
+# TODO replace aymanhab with opensim-org when available
+FROM aymanhab/opensim-deps:4.3.0
+
+RUN mkdir opensim_build && cd opensim_build && cmake ../opensim-core \
+      -DCMAKE_INSTALL_PREFIX="~/opensim_install" -DOPENSIM_DEPENDENCIES_DIR="~/opensim_dependencies_install" \
+      -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF \
+      && make -j8 && make -j8 install
