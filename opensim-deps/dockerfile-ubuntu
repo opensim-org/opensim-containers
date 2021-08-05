@@ -1,6 +1,10 @@
 FROM ubuntu:18.04
 
-RUN apt-get update && apt-get --yes --fix-missing install \
+MAINTAINER Ayman Habib
+
+# Set DEBIAN_FRONTEND to avoid interactive timezone prompt when installing
+# packages.
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes --fix-missing install \
     git \
     build-essential libtool autoconf \
     cmake cmake-curses-gui \
@@ -11,8 +15,11 @@ RUN apt-get update && apt-get --yes --fix-missing install \
     libxi-dev libxmu-dev liblapack-dev libopenblas-dev \
     cmake cmake-curses-gui \
     coinor-libipopt-dev libcolpack-dev
+
 # This clones latest master, we should use tags for public releases
-RUN git clone https://github.com/opensim-org/opensim-core.git && rm -rf opensim-core/.git
+RUN git clone https://github.com/opensim-org/opensim-core.git \
+    && cd /opensim-core \
+    && git checkout master 
 
 RUN mkdir opensim_dependencies_build && cd opensim_dependencies_build && cmake ../opensim-core/dependencies/ \
       -LAH -DCMAKE_INSTALL_PREFIX='~/opensim_dependencies_install' -DCMAKE_BUILD_TYPE=Release \
