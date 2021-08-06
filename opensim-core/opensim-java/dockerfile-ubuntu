@@ -1,5 +1,6 @@
-# TODO replace aymanhab with opensim-org when available
-FROM aymanhab/opensim-deps:4.3.0
+FROM stanfordnmbl/opensim-deps
+
+MAINTAINER Ayman Habib
 
 # The following sets timezone to avoid prompt for timezone when installing packages
 ENV TZ=America/Los_Angeles
@@ -33,8 +34,13 @@ RUN mkdir ~/swig-source && cd ~/swig-source \
         && sh autogen.sh && ./configure --prefix=$HOME/swig --disable-ccache \
         && make && make -j4 install
 
-RUN mkdir opensim_build && cd opensim_build && cmake ../opensim-core \
+RUN mkdir opensim_build \
+       && cd opensim_build \
+       && cmake ../opensim-core \
       -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_JAVA_WRAPPING=ON -DBUILD_TESTING=OFF \
       -DCMAKE_INSTALL_PREFIX="~/opensim_install" -DOPENSIM_DEPENDENCIES_DIR="~/opensim_dependencies_install" \
       -DOPENSIM_C3D_PARSER=ezc3d -DSWIG_DOXYGEN=OFF\
-      && make -j8 && make install
+       && make -j8 \
+       && make install
+
+# image stored at stanfordnmbl/opensim-java
