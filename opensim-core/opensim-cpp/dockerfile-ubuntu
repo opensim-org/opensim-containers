@@ -9,7 +9,7 @@ RUN mkdir opensim_build \
       -DCMAKE_INSTALL_PREFIX="~/opensim_install" -DOPENSIM_DEPENDENCIES_DIR="~/opensim_dependencies_install" \
       -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF \
     && make -j8 \
-    && make -j8 install \
-    && rm -r ../opensim_build
+    && make install \
+    && rm -rf ../opensim_build
 
 # image stored at stanfordnmbl/opensim-cpp
