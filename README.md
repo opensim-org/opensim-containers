@@ -11,11 +11,11 @@ The containers are layered as follows
 - opensim-pyhton (add in swig, python, build opensim-core python bindings)
 - opensim-java (add in swig, java, build opensim-core java bindings)
 - opensim-cpp (opensim-core with no bindings)
-- opensim-all (opensim-core with both python and java bindings)
-- opensim-gui (add opensim-gui to opensim-java)
+- opensim-gui (TODO add opensim-gui to opensim-java)
 
 Possible directions to go:
 - include open-pose
 - include ML tools 
 - include database layer, server, ...
 
+Images created are maintained on dockerhub under the stanfordnmbl organization
