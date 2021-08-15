@@ -33,7 +33,9 @@ RUN mkdir opensim_build \
         && make -j8 \
         && make install \
         && rm -rf ../opensim_build \
-        && rm -rf ~/opensim_dependencies_install \
         && rm -rf $HOME/swig
+      
+ # Set LD_LIBRARY_PATH so pyhton can load the shard libraries
+ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/opensim_dependencies_install/simbody/lib
 
 # image stored at stanfordnmbl/opensim-python
