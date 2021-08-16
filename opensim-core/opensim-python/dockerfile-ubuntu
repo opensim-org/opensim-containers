@@ -36,4 +36,9 @@ RUN mkdir opensim_build \
         && rm -rf ~/opensim_dependencies_install \
         && rm -rf $HOME/swig
 
+RUN cd /root/opensim_install/lib/python3.6/site-packages \
+    && python3 setup.py install
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/opensim_install/lib:/root/opensim_install/lib/python3.6/site-packages/opensim
+
 # image stored at stanfordnmbl/opensim-python
