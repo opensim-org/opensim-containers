@@ -41,12 +41,13 @@ RUN mkdir opensim_build \
         && make -j8 \
         && make install \
         && rm -rf ../opensim_build \
-        && rm -rf $HOME/swig
+        && rm -rf $HOME/swig \
+        && cp /root/opensim_dependencies_install/adol-c/lib64/*.so* /root/opensim_install/bin 
 
 # Set LD_LIBRARY_PATH so pyhton can load the shard libraries
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/opensim_dependencies_install/simbody/lib:/root/opensim_install/lib
-
-#RUN cd /root/opensim_install/lib/python3.8/site-packages \
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/opensim_dependencies_install/simbody/lib:/root/opensim_install/lib
+ENV PATH=$PATH:/root/opensim_install/bin
+# RUN cd /root/opensim_install/lib/python3.8/site-packages \
 #    && python3.8 setup.py install
 
 # image stored at stanfordnmbl/opensim-python
