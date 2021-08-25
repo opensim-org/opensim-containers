@@ -1,24 +1,56 @@
-# TODO replace aymanhab with opensim-org when available
-FROM aymanhab/opensim-deps:4.3.0
+FROM stanfordnmbl/opensim-deps
+
+MAINTAINER Ayman Habib
 
 # The following sets timezone to avoid prompt for timezone when installing packages later
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes install \
-        python3 python3-dev python3-numpy python3-scipy \
-        python3-matplotlib python3-opencv \
-        python3-setuptools libpcre3 libpcre3-dev flex bison
+
+RUN apt-get update \
+        && DEBIAN_FRONTEND=noninteractive \
+        && apt-get --yes install \
+            software-properties-common \
+            python3.8 python3.8-dev python3.8-distutils python3.8-venv \
+            libpcre3 libpcre3-dev flex bison
+RUN wget https://bootstrap.pypa.io/get-pip.py \
+        && python3.8 get-pip.py \
+        && pip3.8 install numpy
 
 # install Swig from source then install
 RUN mkdir ~/swig-source && cd ~/swig-source \
         && wget https://github.com/swig/swig/archive/refs/tags/rel-4.0.2.tar.gz \
-        && tar xzf rel-4.0.2.tar.gz && cd swig-rel-4.0.2 \
-        && sh autogen.sh && ./configure --prefix=$HOME/swig --disable-ccache \
-        && make && make -j4 install
+        && tar xzf rel-4.0.2.tar.gz \
+        && cd swig-rel-4.0.2 \
+        && sh autogen.sh \
+        && ./configure --prefix=$HOME/swig --disable-ccache \
+        && make \
+        && make -j4 install \
+        && rm -rf ~/swig-source 
 
 # Build and install opensim-core with python bindings
-RUN mkdir opensim_build && cd opensim_build && cmake ../opensim-core \
-      -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_PYTHON_WRAPPING=ON \
-      -DCMAKE_INSTALL_PREFIX="~/opensim_install" -DOPENSIM_DEPENDENCIES_DIR="~/opensim_dependencies_install" \
-      -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF \
-      && make -j8 && make -j8 install && rm -rf ../opensim_build
+RUN mkdir opensim_build \
+        && cd opensim_build \
+        && cmake ../opensim-core \
+            -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_PYTHON_WRAPPING=ON \
+            -DCMAKE_INSTALL_PREFIX="~/opensim_install" -DOPENSIM_DEPENDENCIES_DIR="~/opensim_dependencies_install" \
+            -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF -DSWIG_DOXYGEN=OFF \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3.8 \
+            -DPYTHON_INCLUDE_DIR=/usr/include/python3.8 \
+            -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.8.so \
+            -DPYTHON_NUMPY_INCLUDE_DIR=/usr/local/lib/python3.8/dist-packages/numpy/core/include \
+        && make -j8 \
+        && make install \
+        && rm -rf ../opensim_build \
+        && rm -rf $HOME/swig \
+        && cp /root/opensim_dependencies_install/adol-c/lib64/*.so* /root/opensim_install/lib 
+
+# Set LD_LIBRARY_PATH so pyhton can load the shard libraries
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/opensim_dependencies_install/simbody/lib:/root/opensim_install/lib
+ENV PATH=$PATH:/root/opensim_install/bin
+
+# Ideally we install the module but that doesn't work now, so we set PYTHONPATH instead
+ENV PYTHONPATH=/root/opensim_install/lib/python3.8/site-packages
+# RUN cd /root/opensim_install/lib/python3.8/site-packages \
+#    && python3.8 setup.py install
+
+# image stored at stanfordnmbl/opensim-python
