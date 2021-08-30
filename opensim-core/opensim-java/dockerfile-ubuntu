@@ -48,6 +48,8 @@ RUN mkdir opensim_build \
        && make install \
        && rm -rf ../opensim_build \
        && rm -rf ~/opensim_dependencies_install \
-       && rm -rf $HOME/swig
+       && rm -rf $HOME/swig \
+       && cp /root/opensim_dependencies_install/adol-c/lib64/*.so* /root/opensim_install/lib 
+
 
 # image stored at stanfordnmbl/opensim-java
