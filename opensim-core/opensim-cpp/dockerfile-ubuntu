@@ -13,7 +13,7 @@ RUN mkdir opensim_build \
     && rm -rf ../opensim_build \
     && cp /root/opensim_dependencies_install/adol-c/lib64/*.so* /root/opensim_install/lib 
 
-# Set LD_LIBRARY_PATH so pyhton can load the shard libraries
+# Set LD_LIBRARY_PATH so executables can load the shard libraries
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/opensim_dependencies_install/simbody/lib:/root/opensim_install/lib
 ENV PATH=$PATH:/root/opensim_install/bin
 
