@@ -18,4 +18,7 @@ Possible directions to go:
 - include ML tools 
 - include database layer, server, ...
 
-Images created are maintained on dockerhub under the stanfordnmbl organization
+Images created by the Dockerfiles in this repo are maintained on dockerhub under the stanfordnmbl organization
+https://hub.docker.com/orgs/stanfordnmbl/repositories
+The master branch will be for maintaining opensim-core latest environment but supported images are those for specific tags.
+If you have ideas to imporove or slim down the images let us know by opening issues on this repo.
