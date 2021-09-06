@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps
+FROM stanfordnmbl/opensim-deps:latest
 
 MAINTAINER Ayman Habib
 
@@ -10,6 +10,11 @@ RUN mkdir opensim_build \
       -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF \
     && make -j8 \
     && make install \
-    && rm -rf ../opensim_build
+    && rm -rf ../opensim_build \
+    && cp /root/opensim_dependencies_install/adol-c/lib64/*.so* /root/opensim_install/lib 
+
+# Set LD_LIBRARY_PATH so executables can load the shard libraries
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/opensim_dependencies_install/simbody/lib:/root/opensim_install/lib
+ENV PATH=$PATH:/root/opensim_install/bin
 
 # image stored at stanfordnmbl/opensim-cpp
