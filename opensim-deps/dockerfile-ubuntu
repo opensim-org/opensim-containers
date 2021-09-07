@@ -2,6 +2,14 @@ FROM ubuntu:18.04
 
 MAINTAINER Ayman Habib
 
+# Prepare environment variables with paths used now and later (using absolute paths )
+
+# Set environment variable with the dependencies install directory
+ENV OPENSIM_DEPENDENCIES_HOME="/root/opensim_dependencies_install"
+
+# Set environment variable with the OpenSim install directory (will be used by child images)
+ENV OPENSIM_HOME="/root/opensim_install"
+
 # Set DEBIAN_FRONTEND to avoid interactive timezone prompt when installing
 # packages.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes --fix-missing install \
@@ -25,7 +33,7 @@ RUN git clone https://github.com/opensim-org/opensim-core.git \
 RUN mkdir opensim_dependencies_build \
     && cd opensim_dependencies_build \
     && cmake ../opensim-core/dependencies/ \
-      -LAH -DCMAKE_INSTALL_PREFIX='~/opensim_dependencies_install' -DCMAKE_BUILD_TYPE=Release \
+      -LAH -DCMAKE_INSTALL_PREFIX=$OPENSIM_DEPENDENCIES_HOME -DCMAKE_BUILD_TYPE=Release \
       -DSUPERBUILD_ezc3d=ON -DSUPERBUILD_casadi=ON -DSUPERBUILD_adolc=ON -DSUPERBUILD_ipopt=ON \
       -DSUPERBUILD_colpack=ON \
     && make -j8 \
