@@ -8,7 +8,7 @@ MAINTAINER Ayman Habib
 ENV OPENSIM_DEPENDENCIES_HOME="/root/opensim_dependencies_install"
 
 # Set environment variable with the OpenSim install directory (will be used by child images)
-ENV OPENSIM_HOME="/root/opensim_install"
+ENV OPENSIM_INSTALL="/root/opensim_install"
 
 # Set DEBIAN_FRONTEND to avoid interactive timezone prompt when installing
 # packages.
