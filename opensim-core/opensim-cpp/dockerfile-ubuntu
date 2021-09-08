@@ -6,7 +6,7 @@ MAINTAINER Ayman Habib
 RUN mkdir opensim_build \
     && cd opensim_build \
     && cmake ../opensim-core \
-      -DCMAKE_INSTALL_PREFIX=$OPENSIM_HOME -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
+      -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
       -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF \
     && make -j8 \
     && make install \
