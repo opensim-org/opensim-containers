@@ -42,7 +42,7 @@ RUN mkdir opensim_build \
        && cd opensim_build \
        && cmake ../opensim-core \
         -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_JAVA_WRAPPING=ON -DBUILD_TESTING=OFF \
-        -DCMAKE_INSTALL_PREFIX="~/opensim_install" -DOPENSIM_DEPENDENCIES_DIR="~/opensim_dependencies_install" \
+        -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
         -DOPENSIM_C3D_PARSER=ezc3d -DSWIG_DOXYGEN=OFF \
        && make -j8 \
        && make install \
