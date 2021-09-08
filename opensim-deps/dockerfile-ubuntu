@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-MAINTAINER Ayman Habib
+LABEL maintainer="Ayman Habib"
 
 # Set DEBIAN_FRONTEND to avoid interactive timezone prompt when installing
 # packages.

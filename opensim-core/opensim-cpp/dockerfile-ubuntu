@@ -1,6 +1,6 @@
 FROM stanfordnmbl/opensim-deps
 
-MAINTAINER Ayman Habib
+LABEL maintainer="Ayman Habib"
 
 # Build cpp only libraries and cli for opensim-core no bindings
 RUN mkdir opensim_build \

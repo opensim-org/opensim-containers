@@ -1,6 +1,6 @@
 FROM stanfordnmbl/opensim-deps
 
-MAINTAINER Ayman Habib
+LABEL maintainer="Ayman Habib"
 
 # The following sets timezone to avoid prompt for timezone when installing packages later
 ENV TZ=America/Los_Angeles
