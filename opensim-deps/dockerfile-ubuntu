@@ -5,10 +5,10 @@ LABEL maintainer="Ayman Habib"
 # Prepare environment variables with paths used now and later (using absolute paths )
 
 # Set environment variable with the dependencies install directory
-ENV OPENSIM_DEPENDENCIES_HOME="/root/opensim_dependencies_install"
+ENV OPENSIM_DEPENDENCIES_HOME="/opensim_dependencies_install"
 
 # Set environment variable with the OpenSim install directory (will be used by child images)
-ENV OPENSIM_INSTALL="/root/opensim_install"
+ENV OPENSIM_INSTALL="/opensim_install"
 
 # Set DEBIAN_FRONTEND to avoid interactive timezone prompt when installing
 # packages.
