@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps
+FROM stanfordnmbl/opensim-deps:4.3
 
 LABEL maintainer="Ayman Habib"
 
@@ -11,5 +11,11 @@ RUN mkdir opensim_build \
     && make -j8 \
     && make install \
     && rm -rf ../opensim_build
+
+RUN cp "$OPENSIM_DEPENDENCIES_HOME/adol-c/lib64/"*.* "$OPENSIM_INSTALL/lib"
+
+# Set LD_LIBRARY_PATH so pyhton can load the shard libraries
+ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OPENSIM_DEPENDENCIES_HOME/simbody/lib:$OPENSIM_INSTALL/lib"
+ENV PATH=$PATH:"$OPENSIM_INSTALL/bin"
 
 # image stored at stanfordnmbl/opensim-cpp

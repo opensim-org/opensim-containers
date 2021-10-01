@@ -5,7 +5,8 @@ LABEL maintainer="Ayman Habib"
 # The following sets timezone to avoid prompt for timezone when installing packages
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes install \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
+        && apt-get --yes install \
         libpcre3 libpcre3-dev flex bison
 
 # install openjdk8
@@ -47,9 +48,11 @@ RUN mkdir opensim_build \
        && make -j8 \
        && make install \
        && rm -rf ../opensim_build \
-       && rm -rf ~/opensim_dependencies_install \
        && rm -rf $HOME/swig \
-       && cp /root/opensim_dependencies_install/adol-c/lib64/*.so* /root/opensim_install/lib 
+       && cp "$OPENSIM_DEPENDENCIES_HOME/adol-c/lib64/"*.so* "$OPENSIM_INSTALL/lib"
 
+# Set LD_LIBRARY_PATH so pyhton can load the shard libraries
+ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OPENSIM_DEPENDENCIES_HOME/simbody/lib:$OPENSIM_INSTALL/lib"
+ENV PATH=$PATH:"$OPENSIM_INSTALL/bin"
 
 # image stored at stanfordnmbl/opensim-java
