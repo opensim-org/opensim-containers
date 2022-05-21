@@ -15,14 +15,17 @@ ENV OPENSIM_INSTALL="/opensim_install"
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes --fix-missing install \
     git \
     build-essential libtool autoconf \
-    cmake cmake-curses-gui \
     wget \
     pkg-config \
     gfortran \
     freeglut3-dev \
     libxi-dev libxmu-dev liblapack-dev libopenblas-dev \
-    cmake cmake-curses-gui \
-    coinor-libipopt-dev libcolpack-dev
+    software-properties-common
+
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2 | apt-key add -\
+    && apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' \
+    && apt-get update \
+    && apt install --yes cmake cmake-curses-gui
 
 # This clones latest master, we should use tags for public releases
 RUN git clone https://github.com/opensim-org/opensim-core.git \
@@ -34,8 +37,8 @@ RUN mkdir opensim_dependencies_build \
     && cd opensim_dependencies_build \
     && cmake ../opensim-core/dependencies/ \
       -LAH -DCMAKE_INSTALL_PREFIX=$OPENSIM_DEPENDENCIES_HOME -DCMAKE_BUILD_TYPE=Release \
-      -DSUPERBUILD_ezc3d=ON -DSUPERBUILD_casadi=ON -DSUPERBUILD_adolc=ON -DSUPERBUILD_ipopt=ON \
-      -DSUPERBUILD_colpack=ON \
+      -DSUPERBUILD_ezc3d=ON -DOPENSIM_WITH_TROPTER=OFF \
+      -DOPENSIM_WITH_CASADAI=OFF \
     && make -j8 \
     && rm -rf ../opensim_dependencies_build
 

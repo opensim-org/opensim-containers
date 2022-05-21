@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps:latest
+FROM stanfordnmbl/opensim-deps:4.4
 
 LABEL maintainer="Ayman Habib"
 
@@ -43,13 +43,12 @@ RUN mkdir opensim_build \
        && cd opensim_build \
        && cmake ../opensim-core \
         -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_JAVA_WRAPPING=ON -DBUILD_TESTING=OFF \
-        -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
+        -DOPENSIM_WITH_TROPTER=OFF -DOPENSIM_WITH_CASADI=OFF -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
         -DOPENSIM_C3D_PARSER=ezc3d -DSWIG_DOXYGEN=OFF \
        && make -j8 \
        && make install \
        && rm -rf ../opensim_build \
-       && rm -rf $HOME/swig \
-       && cp "$OPENSIM_DEPENDENCIES_HOME/adol-c/lib64/"*.so* "$OPENSIM_INSTALL/lib"
+       && rm -rf $HOME/swig 
 
 # Set LD_LIBRARY_PATH so pyhton can load the shard libraries
 ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OPENSIM_DEPENDENCIES_HOME/simbody/lib:$OPENSIM_INSTALL/lib"
