@@ -30,7 +30,7 @@ RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/nul
 # This clones latest master, we should use tags for public releases
 RUN git clone https://github.com/opensim-org/opensim-core.git \
     && cd /opensim-core \
-    && git checkout master \
+    && git checkout branch_4.4 \
     && rm -rf .git
 
 RUN mkdir opensim_dependencies_build \
