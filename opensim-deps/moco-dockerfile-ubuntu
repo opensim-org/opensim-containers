@@ -1,0 +1,43 @@
+FROM ubuntu:18.04
+
+LABEL maintainer="Ayman Habib"
+
+# Prepare environment variables with paths used now and later (using absolute paths )
+
+# Set environment variable with the dependencies install directory
+ENV OPENSIM_DEPENDENCIES_HOME="/opensim_dependencies_install"
+
+# Set environment variable with the OpenSim install directory (will be used by child images)
+ENV OPENSIM_INSTALL="/opensim_install"
+
+# Set DEBIAN_FRONTEND to avoid interactive timezone prompt when installing
+# packages.
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes --fix-missing install \
+    git \
+    build-essential libtool autoconf \
+    wget \
+    pkg-config \
+    gfortran \
+    freeglut3-dev \
+    libxi-dev libxmu-dev liblapack-dev libopenblas-dev \
+    software-properties-common
+
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add - \
+    && apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" \
+    && apt-get update \
+    && apt install --yes cmake cmake-curses-gui
+
+# This clones latest master, we should use tags for public releases
+RUN git clone https://github.com/opensim-org/opensim-core.git \
+    && cd /opensim-core \
+    && git checkout fix_tropter_libs_linux \
+    && rm -rf .git
+
+RUN mkdir opensim_dependencies_build \
+    && cd opensim_dependencies_build \
+    && cmake ../opensim-core/dependencies/ \
+      -LAH -DCMAKE_INSTALL_PREFIX=$OPENSIM_DEPENDENCIES_HOME -DCMAKE_BUILD_TYPE=Release \
+      -DOPENSIM_WITH_TROPTER=ON -DOPENSIM_WITH_CASADI=ON -DSUPERBUILD_ezc3d=ON \
+    && make -j8 
+
+# images are stored in stanfordnmbl/opensim-deps
