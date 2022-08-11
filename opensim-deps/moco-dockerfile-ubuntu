@@ -37,9 +37,7 @@ RUN mkdir opensim_dependencies_build \
     && cd opensim_dependencies_build \
     && cmake ../opensim-core/dependencies/ \
       -LAH -DCMAKE_INSTALL_PREFIX=$OPENSIM_DEPENDENCIES_HOME -DCMAKE_BUILD_TYPE=Release \
-      -DSUPERBUILD_ezc3d=ON -DOPENSIM_WITH_TROPTER=OFF \
-      -DOPENSIM_WITH_CASADAI=OFF \
-    && make -j8 \
-    && rm -rf ../opensim_dependencies_build
+      -DOPENSIM_WITH_TROPTER=ON -DOPENSIM_WITH_CASADI=ON -DSUPERBUILD_ezc3d=ON \
+    && make -j8 
 
 # images are stored in stanfordnmbl/opensim-deps
