@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps:4.4-with-moco
+FROM stanfordnmbl/opensim-deps:latest-with-moco
 
 LABEL maintainer="Ayman Habib"
 
