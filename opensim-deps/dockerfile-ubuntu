@@ -27,7 +27,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes --fix-miss
 # This clones latest master, we should use tags for public releases
 RUN git clone https://github.com/opensim-org/opensim-core.git \
     && cd /opensim-core \
-    && git checkout master \
+    && git checkout 4.4.1 \
     && rm -rf .git
 
 RUN mkdir opensim_dependencies_build \
