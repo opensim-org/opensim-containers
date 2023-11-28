@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps
+FROM stanfordnmbl/opensim-deps:4.5
 
 LABEL maintainer="Ayman Habib"
 
