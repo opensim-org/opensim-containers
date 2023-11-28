@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps
+FROM stanfordnmbl/opensim-deps:latest
 
 LABEL maintainer="Ayman Habib"
 
@@ -11,7 +11,8 @@ RUN apt-get update \
         && apt-get --yes install \
             software-properties-common \
             python3.8 python3.8-dev python3.8-distutils python3.8-venv \
-            libpcre3 libpcre3-dev flex bison
+            libpcre3 libpcre3-dev flex bison patchelf
+            
 RUN wget https://bootstrap.pypa.io/get-pip.py \
         && python3.8 get-pip.py \
         && pip3.8 install numpy
@@ -33,16 +34,16 @@ RUN mkdir opensim_build \
         && cmake ../opensim-core \
             -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_PYTHON_WRAPPING=ON \
             -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
-            -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF -DSWIG_DOXYGEN=OFF \
+            -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF -DSWIG_DOXYGEN=OFF -DBUILD_API_EXAMPLES=OFF \
             -DPYTHON_EXECUTABLE=/usr/bin/python3.8 \
             -DPYTHON_INCLUDE_DIR=/usr/include/python3.8 \
             -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.8.so \
             -DPYTHON_NUMPY_INCLUDE_DIR=/usr/local/lib/python3.8/dist-packages/numpy/core/include \
-        && make -j8 \
+        && make -j4 \
         && make install \
         && rm -rf ../opensim_build \
-        && rm -rf $HOME/swig \
-        && cp "$OPENSIM_DEPENDENCIES_HOME/adol-c/lib64/*.so*" "$OPENSIM_DEPENDENCIES_HOME/lib"
+        && rm -rf $HOME/swig 
+#        && cp "$OPENSIM_DEPENDENCIES_HOME/adol-c/lib64/*.so*" "$OPENSIM_DEPENDENCIES_HOME/lib"
 
 # Set LD_LIBRARY_PATH so pyhton can load the shard libraries
 ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OPENSIM_DEPENDENCIES_HOME/simbody/lib:$OPENSIM_INSTALL/lib"
