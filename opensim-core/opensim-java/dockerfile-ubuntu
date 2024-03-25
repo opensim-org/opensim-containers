@@ -1,11 +1,12 @@
-FROM stanfordnmbl/opensim-deps
+FROM stanfordnmbl/opensim-deps:4.4
 
 LABEL maintainer="Ayman Habib"
 
 # The following sets timezone to avoid prompt for timezone when installing packages
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get --yes install \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
+        && apt-get --yes install \
         libpcre3 libpcre3-dev flex bison
 
 # install openjdk8
@@ -42,12 +43,15 @@ RUN mkdir opensim_build \
        && cd opensim_build \
        && cmake ../opensim-core \
         -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_JAVA_WRAPPING=ON -DBUILD_TESTING=OFF \
-        -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
+        -DOPENSIM_WITH_TROPTER=OFF -DOPENSIM_WITH_CASADI=OFF -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
         -DOPENSIM_C3D_PARSER=ezc3d -DSWIG_DOXYGEN=OFF \
        && make -j8 \
        && make install \
        && rm -rf ../opensim_build \
-       && rm -rf ~/opensim_dependencies_install \
-       && rm -rf $HOME/swig
+       && rm -rf $HOME/swig 
+
+# Set LD_LIBRARY_PATH so pyhton can load the shard libraries
+ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$OPENSIM_DEPENDENCIES_HOME/simbody/lib:$OPENSIM_INSTALL/lib"
+ENV PATH=$PATH:"$OPENSIM_INSTALL/bin"
 
 # image stored at stanfordnmbl/opensim-java

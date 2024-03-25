@@ -1,4 +1,4 @@
-FROM stanfordnmbl/opensim-deps:4.4
+FROM stanfordnmbl/opensim-deps:4.4-with-moco
 
 LABEL maintainer="Ayman Habib"
 
@@ -34,7 +34,6 @@ RUN mkdir opensim_build \
             -DSWIG_DIR=~/swig/share/swig -DSWIG_EXECUTABLE=~/swig/bin/swig -DBUILD_PYTHON_WRAPPING=ON \
             -DCMAKE_INSTALL_PREFIX=$OPENSIM_INSTALL -DOPENSIM_DEPENDENCIES_DIR=$OPENSIM_DEPENDENCIES_HOME \
             -DOPENSIM_C3D_PARSER=ezc3d -DBUILD_TESTING=OFF -DSWIG_DOXYGEN=OFF \
-            -DOPENSIM_WITH_TROPTER=OFF -DOPENSIM_WITH_CASADI=OFF \
             -DPYTHON_EXECUTABLE=/usr/bin/python3.8 \
             -DPYTHON_INCLUDE_DIR=/usr/include/python3.8 \
             -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.8.so \
